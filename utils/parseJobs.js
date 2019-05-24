@@ -14,11 +14,7 @@ const parseJobs = (feeds, jobQuery) => {
         } 
     }
 
-    const sortByLocation = (value) => {
-        return value.remote == true
-    }
-
-    const codepenJobs = feeds.codepen.value.jobs.filter(sortByLocation)
+    const codepenJobs = feeds.codepen.value.jobs.filter(value => value.remote == true)
 
     return {
         github: feeds.github.value.filter(sortByTitle), 
