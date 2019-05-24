@@ -1,0 +1,20 @@
+{
+  "name": "Gigs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "david-j-davis <davidjamesdavis.djd@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^3.0.0",
+    "express": "^4.17.0",
+    "feedparser": "^2.2.9",
+    "node-feedparser": "^1.0.1",
+    "node-fetch": "^2.6.0",
+    "request": "^2.88.0"
+  }
+}
