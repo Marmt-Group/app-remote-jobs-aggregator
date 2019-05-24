@@ -1,1 +1,6 @@
 node_modules
+.cache
+*.marko.js
+templates-*.js
+templates-*.css
+static/templates

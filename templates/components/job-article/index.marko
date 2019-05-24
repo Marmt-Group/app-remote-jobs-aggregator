@@ -1,0 +1,65 @@
+style {
+  article.job {
+    background: #353535;
+    padding: 30px;
+    margin: 30px 0;
+  }
+  .meta {
+    margin-bottom: 30px;
+  }
+}
+
+<section>
+  <h1>StackOverflow jobs</h1>
+    <for|value| of=input.jobs.stackoverflow>      
+        <article.job>
+            <h2>${value.title}</h2>
+            <small>Posted: ${value.date}</small>
+            <div.meta>
+              <p><small><a href=`${value.link}` target="_blank">Original job post</a></small></p>
+            </div>
+        </article>
+    </for>
+</section>
+
+<section>
+  <h1>WeWorkRemotely jobs</h1>
+    <for|value| of=input.jobs.wwremotely>      
+        <article.job>
+            <h2>${value.title}</h2>
+            <small>Posted: ${value.date}</small>
+            <div.meta>
+              <p><small><a href=`${value.link}` target="_blank">Original job post</a></small></p>
+            </div>
+        </article>
+    </for>
+</section>
+
+<section>
+  <h1>Codepen jobs</h1>
+    <for|value| of=input.jobs.codepen>      
+        <article.job>
+            <h2>${value.title}</h2>
+            <div.meta>
+              <p>Company: ${value.company_name}</p>
+              <p><small><a href=`${value.url}` target="_blank">Original job post</a></small></p>
+            </div>
+            
+        </article>
+    </for>
+</section>
+
+<section>
+  <h1>Github jobs</h1>
+    <for|value| of=input.jobs.github>      
+        <article.job>
+            <h2>${value.title}</h2>
+            <small>Posted: ${value.created_at}</small>
+            <div.meta>
+              <p>Company: ${value.company}</p>
+              <p><small><a href=`${value.url}` target="_blank">Original job post</a></small></p>
+            </div>
+        </article>
+    </for>
+</section>
+

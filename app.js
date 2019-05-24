@@ -1,83 +1,50 @@
-const async = require('async')
-const fetch = require('node-fetch')
-const parser = require('node-feedparser') //for parsing rss/xml
-const {
-    performance
-} = require('perf_hooks')
-const buildHTML = require('./utils/buildHtml')
-const parseJobs = require('./utils/parseJobs')
+const path = require('path');
+const app = require('fastify')({
+    logger: true
+})
+const retrieveJobs = require('./utils/retrieveJobs')
 
+const isProduction = process.env.NODE_ENV === 'production'
+const outputDir = path.join(__dirname, 'static')
+const argv = require('yargs').argv
+const jobQuery = argv.job ? argv.job : 'Front end';
 
-/**
- * Retrieve jobs from feeds using async module. When all are retrieved callback is fired. 
- */
-const retrieveJobs = () => {
-    // const startTime = performance.now()
-    // console.log('Starting ops...')
-    const feeds = {
-        wwremotely: (callback) => {
-            fetch('https://weworkremotely.com/categories/remote-programming-jobs.rss')
-                .catch(error => {
-                    return callback(error || new Error('Response non-200'));
-                })
-                .then(res => res.text())
-                .then(body => {
-                    parser(body, (error, ret) => {
-                        if (error) {
-                            return callback(error || new Error('Response non-200'));
-                        }
-                        return callback(null, ret)
-                    })
-                })
+require('lasso').configure({
+    plugins: [
+        'lasso-marko' // Allow Marko templates to be compiled and transported to the browser
+    ],
+    outputDir: outputDir,
+    bundlingEnabled: isProduction,
+    minify: isProduction,
+    fingerprintsEnabled: isProduction,
+});
 
-        },
-        github: (callback) => {
-            fetch('https://jobs.github.com/positions.json?description=&location=remote')
-                .catch(error => {
-                    return callback(error || new Error('Response non-200'));
-                })
-                .then(res => res.json())
-                .then(body => {
-                    return callback(null, body);
-                })
-                
-        },
-        stackoverflow: (callback) => {
-            fetch('https://stackoverflow.com/jobs/feed?l=Remote')
-                .catch(error => {
-                    return callback(error || new Error('Response non-200'));
-                })
-                .then(res => res.text())
-                .then(body => {
-                    parser(body, (error, ret) => {
-                        if (error) {
-                            return callback(error || new Error('Response non-200'));
-                        }
-                        return callback(null, ret)
-                    })
-                })
-        },
-        codepen: (callback) => {
-            fetch('https://codepen.io/jobs.json')
-                .catch(error => {
-                    return callback(error || new Error('Response non-200'));
-                })
-                .then(res => res.json())
-                .then(body => {
-                    return callback(null, body);
-                })
-        }
+// Register marko template engine
+app.register(require("point-of-view"), {
+    engine: {
+        marko: require("marko")
     }
-    /**
-     * @param  {} async.reflectAll // continues the execution of other tasks when a task fails.
-     */
-    async.parallel(async.reflectAll(feeds),
-        (err, results) => {
-            if (err) console.error(err)
-            //console.log(`Finished. Elapsed time: ${Math.floor(performance.now() - startTime)} miliseconds.`)
-            // buildHTML(parseJobs(results, ['Front End Developer','Front-end Developer', 'Senior Front End Developer']))
-            buildHTML(parseJobs(results))
-        })
-}
+});
 
-retrieveJobs()
+// Register static file directory
+app.register(require('fastify-static'), {
+    root: outputDir,
+    prefix: '/static'
+});
+
+// Get Routes
+app.get('/', async (request, reply) => {
+    await retrieveJobs(jobQuery).then((result) => {
+        //console.log(result.stackoverflow)
+        reply.view('/templates/index.marko', result)
+    }, (err) => {
+        console.error(err);
+    })
+    
+});
+
+// Start server
+app.listen(3000, (err, address) => {
+    if (err) throw err
+    app.log.info(`server listening on ${address}`)
+})
