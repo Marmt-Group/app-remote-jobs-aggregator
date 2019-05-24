@@ -15,4 +15,5 @@ git clone https://github.com/Marmt-Group/remote-jobs-aggregator.git
 cd remote-jobs-aggregator
 npm install
 NODE_ENV=production node app.js --job='Full Stack' # or NODE_ENV=production node app.js --job='Front End'
+open http://localhost:3000/
 ```

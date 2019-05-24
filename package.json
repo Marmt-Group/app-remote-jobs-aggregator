@@ -9,6 +9,10 @@
   },
   "keywords": [],
   "author": "david-j-davis <davidjamesdavis.djd@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Marmt-Group/remote-jobs-aggregator.git"
+  },
   "license": "ISC",
   "dependencies": {
     "@lasso/marko-taglib": "^1.0.15",
