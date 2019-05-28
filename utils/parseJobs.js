@@ -3,6 +3,16 @@
  */
 const parseJobs = (feeds, jobQuery) => {
 
+    const sortByDate = ((a, b) => {
+        if (a.date) {
+            return new Date(b.date) - new Date(a.date)
+        } else if (a.created_at) {
+            return new Date(b.created_at) - new Date(a.created_at)
+        }
+    })
+
+    const sortByRemote = (value => value.remote == true)
+
     const sortByTitle = (value) => {
         switch (jobQuery.toLowerCase()) {
             case 'full stack':
@@ -14,13 +24,11 @@ const parseJobs = (feeds, jobQuery) => {
         } 
     }
 
-    const codepenJobs = feeds.codepen.value.jobs.filter(value => value.remote == true)
-
     return {
-        github: feeds.github.value.filter(sortByTitle), 
-        wwremotely: feeds.wwremotely.value.items.filter(sortByTitle),
-        stackoverflow: feeds.stackoverflow.value.items.filter(sortByTitle),
-        codepen: codepenJobs.filter(sortByTitle)
+        github: feeds.github.value.filter(sortByTitle).sort(sortByDate), 
+        wwremotely: feeds.wwremotely.value.items.filter(sortByTitle).sort(sortByDate),
+        stackoverflow: feeds.stackoverflow.value.items.filter(sortByTitle).sort(sortByDate),
+        codepen: feeds.codepen.value.jobs.filter(sortByRemote).filter(sortByTitle)
     }
 }
 
