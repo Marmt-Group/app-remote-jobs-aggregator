@@ -1,8 +1,11 @@
 style {
-  article.job {
+  article {
     background: #353535;
     padding: 30px;
     margin: 30px 0;
+  }
+  .recent {
+    background: #b8f08254;
   }
   .meta {
     margin-bottom: 30px;
@@ -12,7 +15,7 @@ style {
 <section>
   <h1>StackOverflow jobs</h1>
     <for|value| of=input.jobs.stackoverflow>      
-        <article.job>
+        <article class="${value.date >= input.jobs.recentDate ? 'recent' : '' }">
             <h2>${value.title}</h2>
             <small>Posted: ${value.date}</small>
             <div.meta>
@@ -25,7 +28,7 @@ style {
 <section>
   <h1>WeWorkRemotely jobs</h1>
     <for|value| of=input.jobs.wwremotely>      
-        <article.job>
+        <article class="${value.date >= input.jobs.recentDate ? 'recent' : '' }">
             <h2>${value.title}</h2>
             <small>Posted: ${value.date}</small>
             <div.meta>
@@ -38,7 +41,7 @@ style {
 <section>
   <h1>Codepen jobs</h1>
     <for|value| of=input.jobs.codepen>      
-        <article.job>
+        <article>
             <h2>${value.title}</h2>
             <div.meta>
               <p>Company: ${value.company_name}</p>
@@ -52,7 +55,7 @@ style {
 <section>
   <h1>Github jobs</h1>
     <for|value| of=input.jobs.github>      
-        <article.job>
+        <article class="${value.created_at >= input.jobs.recentDate ? 'recent' : '' }">
             <h2>${value.title}</h2>
             <small>Posted: ${value.created_at}</small>
             <div.meta>
